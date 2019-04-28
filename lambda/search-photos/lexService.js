@@ -5,7 +5,7 @@ module.exports.extractKeywords = async function(query) {
 
     var params = {
         botAlias: '$LATEST',
-        botName: 'SearchIntent',
+        botName: 'PhotoSearch',
         inputText: query,        
     };
 
