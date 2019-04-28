@@ -1,11 +1,13 @@
 'use strict';
 const elasticSearchService = require('./elasticSearchService');
-
+const lexService = require('./lexService');
 
 module.exports.search = async (event, context) => {
   
-  
-  let paths = await elasticSearchService.getPhotoPaths(query);
+  console.log(event.queryStringParameters.q);
+  let searchText = event.queryStringParameters.q;
+  let keywords = lexService.extractKeywords(searchText);
+  let paths = await elasticSearchService.getPhotoPaths(keywords);
   
   return {
     statusCode: 200,

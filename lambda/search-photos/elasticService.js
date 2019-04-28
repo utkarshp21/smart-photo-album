@@ -1,12 +1,11 @@
 'use strict';
 
 const https = require('https');
-const AWS = require('aws-sdk')
 
-module.exports.getPhotoPaths = async function(label) {
+module.exports.getPhotoPaths = async function(keywords) {
     const options = {
         hostname: 'vpc-photos-pwijntujtjh2df7m2evxyujm7u.us-east-1.es.amazonaws.com',
-        path: '/_search?q=labels:' + label,
+        path: '/_search?q=labels:' + keywords,
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
