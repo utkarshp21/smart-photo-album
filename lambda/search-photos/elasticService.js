@@ -40,4 +40,4 @@ module.exports.getPhotoPaths = async function(keywords) {
             reject(err.message);
         });
     });
-}
+};

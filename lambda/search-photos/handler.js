@@ -1,12 +1,12 @@
 'use strict';
-const elasticSearchService = require('./elasticSearchService');
+const elasticSearchService = require('./elasticService');
 const lexService = require('./lexService');
 
 module.exports.search = async (event, context) => {
   
-  console.log(event.queryStringParameters.q);
-  let searchText = event.queryStringParameters.q;
-  let keywords = lexService.extractKeywords(searchText);
+  // console.log("Received query - " + event.queryStringParameters.q);
+  let searchText = "Show me dogs";//event.queryStringParameters.q;
+  let keywords = await lexService.extractKeywords(searchText);
   let paths = await elasticSearchService.getPhotoPaths(keywords);
   
   return {
