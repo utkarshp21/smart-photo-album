@@ -1,42 +1,50 @@
-var AWS = require('aws-sdk');
+let AWS = require('aws-sdk');
 
 
-const domain = "https://vpc-photos-pwijntujtjh2df7m2evxyujm7u.us-east-1.es.amazonaws.com";
-const region = "us-east-1";
-var index = 'node-test';
-var type = '_doc';
-var id = '1';
-var json = {
-  "title": "Moneyball",
-  "director": "Bennett Miller",
-  "year": "2011"
-};
-
-
-module.exports.indexDoc = async function(path, labels) {
+module.exports.indexDoc = async function (imageKey, labels, bucket, createdTimeStamp) {
     
-    var endpoint = new AWS.Endpoint(domain);
-    var request = new AWS.HttpRequest(endpoint, region);
+    let elasticObject = {
+        "objectKey": imageKey,
+        "bucket": bucket,
+        "labels": labels,
+        "imageUploadedTimeStamp": createdTimeStamp,
+    };
+
+    console.log("Elactic Object Print:", elasticObject);
+
+    const domain = "search-smart-photo-album-js7vrgydwdwvwkomkfrtntwz7y.us-east-1.es.amazonaws.com";
+    const region = "us-east-1";
+    let index = 'photos';
+    let type = '_doc';
+    let id = bucket + "-" + imageKey.split('.').join("-");
+    console.log("ID: ", id);
+    const endpoint = new AWS.Endpoint(domain);
+    
+    let request = new AWS.HttpRequest(endpoint, region);
     request.method = 'PUT';
     request.path += index + '/' + type + '/' + id;
-    request.body = JSON.stringify(json);
+    request.body = JSON.stringify(elasticObject);
     request.headers['host'] = domain;
     request.headers['Content-Type'] = 'application/json';
-    // Content-Length is only needed for DELETE requests that include a request
-    // body, but including it for all requests doesn't seem to hurt anything.
-    request.headers["Content-Length"] = request.body.length;
     
-    var credentials = new AWS.EnvironmentCredentials('AWS');
-    var signer = new AWS.Signers.V4(request, 'es');
+    
+    let credentials = new AWS.EnvironmentCredentials('AWS');
+    let signer = new AWS.Signers.V4(request, 'es');
     signer.addAuthorization(credentials, new Date());
     
-    var client = new AWS.HttpClient();
+    let client = new AWS.HttpClient();
+    
     return new Promise((resolve, reject) => {
         client.handleRequest(request, null, function(response) {
             console.log(response.statusCode + ' ' + response.statusMessage);
-            response.on('end', function (chunk) {
+            let elasticResponse = '';
+            response.on('data', function (chunk) {
+                elasticResponse += chunk;
+            });
+            response.on('end', function () {
                 console.log("Indexing Complete");
-                resolve("Done");
+                console.log('Response body: ' + elasticResponse);
+                resolve(elasticResponse);
             });
             }, function(error) {
                 console.log("Indexing Failed");
@@ -46,3 +54,7 @@ module.exports.indexDoc = async function(path, labels) {
     });
     
 };
+
+
+
+
