@@ -12,6 +12,8 @@ module.exports.extractKeywords = async function(query) {
 
     return new Promise((resolve, reject) => {
         lexRuntime.postText(params, function(err, data) {
+            console.log("lex Data", data);
+            console.log("lex Data Slots", data.slots);
             if (err) {
                 console.log("Failed to get labels from query");
                 console.log(err, err.stack);
