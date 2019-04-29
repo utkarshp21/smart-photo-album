@@ -3,9 +3,12 @@
 const https = require('https');
 
 module.exports.getPhotoPaths = async function(keywords) {
+
+    // keywords = ["dog", "cat", "rabbit"];
+
     const options = {
-        hostname: 'vpc-photos-pwijntujtjh2df7m2evxyujm7u.us-east-1.es.amazonaws.com',
-        path: '/_search?q=labels:' + keywords,
+        hostname: 'search-smart-photo-album-js7vrgydwdwvwkomkfrtntwz7y.us-east-1.es.amazonaws.com',
+        path: '/_search?q=labels:' + keywords.join(),
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -15,27 +18,28 @@ module.exports.getPhotoPaths = async function(keywords) {
     return new Promise((resolve, reject) => {
         https.get(options, (resp) => {
             let data = '';
+            
             resp.on('data', (chunk) => {
-                // console.log("printing chunks");
                 data += chunk;
             });
             resp.on('end', () => {
                 let parsedData = JSON.parse(data);
-                let paths = [];
+
+                let photosPath = [];
                 if (parsedData  && parsedData.hits && parsedData.hits.hits){
-                    let ids = parsedData.hits.hits;
-                    paths = ids.map(function (elem) {
-                        return {
-                            "id": {S:elem._id},
-                        };
+                    
+                    let imageobjects = parsedData.hits.hits;
+                    
+                    photosPath = imageobjects.map(function (item) {
+                        return `${item._source.bucket}/${item._source.objectKey}`
                     });
+
                 }
-                console.log("Received " + paths.length + " ES indices");
-                resolve(paths);
+                resolve(photosPath);
             });
 
         }).on("error", (err) => {
-            console.log("Error Getting S3 Paths from Elastic");
+            console.log("Error Getting S3 Image Paths from Elastic");
             console.log("Error: " + err.message);
             reject(err.message);
         });
