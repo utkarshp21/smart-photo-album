@@ -3,6 +3,7 @@ const lexRuntime = new AWS.LexRuntime();
 
 module.exports.extractKeywords = async function(query) {
 
+    console.log("Received query for Lex[" + query + "]");
     var params = {
         botAlias: '$LATEST',
         botName: 'PhotoSearch',
@@ -23,7 +24,9 @@ module.exports.extractKeywords = async function(query) {
                 let keywords = [];
                 if (data && data.slots){
                     for (var a in data.slots) {
-                        keywords.push(data.slots[a]);
+                        if (data.slots[a]){
+                            keywords.push(data.slots[a]);
+                        }
                     }
                 }
                 console.log("Returning keywords To Search - " + keywords);
