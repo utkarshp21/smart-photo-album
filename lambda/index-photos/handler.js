@@ -5,9 +5,10 @@ const elasticService = require('./elasticService');
 
 module.exports.index = async (event, context) => {
   
-  let bucket = event.Records[0].s3.bucket.name
+  let bucket = event.Records[0].s3.bucket.name;
   let imageKey = event.Records[0].s3.object.key;
-  
+  // let bucket = "photo-album-b2";
+  // let imageKey = "cat.jpg";
   let createdTimeStamp = event.Records[0].eventTime;
   
   let labels = await rekognitionService.detectLabels(bucket, imageKey);
