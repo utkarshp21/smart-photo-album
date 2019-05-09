@@ -11,7 +11,7 @@ module.exports.indexDoc = async function (imageKey, labels, bucket, createdTimeS
     };
 
     console.log("Elactic Object Print:", elasticObject);
-    const domain = "vpc-smart-photo-album-dev-vw3z45d3omxyjtrjfwacvlke4i.us-east-1.es.amazonaws.com"
+    const domain = "vpc-smart-photo-album-dev-vw3z45d3omxyjtrjfwacvlke4i.us-east-1.es.amazonaws.com";
     // const domain = "search-smart-photo-album-js7vrgydwdwvwkomkfrtntwz7y.us-east-1.es.amazonaws.com";
     const region = "us-east-1";
     let index = 'photos';
