@@ -10,6 +10,8 @@
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
     
+        <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.12.min.js"></script>
+
     <script type="text/javascript" src="lib/axios/dist/axios.standalone.js"></script>
     <script type="text/javascript" src="lib/CryptoJS/rollups/hmac-sha256.js"></script>
     <script type="text/javascript" src="lib/CryptoJS/rollups/sha256.js"></script>
@@ -22,7 +24,6 @@
     <script type="text/javascript" src="lib/apiGatewayCore/utils.js"></script>
     <script type="text/javascript" src="apigClient.js"></script>
 
-    <script src="script.js"></script>
     <link rel="stylesheet" href="styles.css">
 
     <title>Smart Photo Album</title>
@@ -39,24 +40,23 @@
             <div class="input-group mb-3">
                 <div class="custom-file">
                     <input type="file" class="custom-file-input" id="inputGroupFile02">
-                    <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">Choose
+                    <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02" id="photoLabel">Choose
                         Photo</label>
-                </div>
-                <div class="input-group-append">
-                    <span class="input-group-text" id="inputGroupFileAddon02">Upload Photo</span>
                 </div>
             </div>
         </div>
     </div>
-   
 
+    <img id='img-upload' />
+   
     <div class="input-group mb-3">
-        <input type="text" class="form-control" id="searchInput" placeholder="Try searching for Show Cat and Dog" aria-label="Recipient's username"
+        <input type="text" class="form-control" id="searchInput" placeholder="Try - search for dog" aria-label="Recipient's username"
             aria-describedby="button-addon2">
 
         <div class="input-group-append">
-            <button  onclick="searchImages()" class="btn btn-outline-secondary" type="button" id="button-addon2">Search Photo</button>
+            <button  onclick="searchImages()" class="btn btn-outline-secondary" type="button" id="searchButton">Search Photo</button>
         </div>
+    <!-- <audio id="player" controls></audio> -->
     </div>
 
     <div class="row" id="imageContainer">
@@ -74,5 +74,8 @@
 </div>
 
 </body>
+
+<script src="script.js"></script>
+
 
 </html>
