@@ -7,7 +7,7 @@ module.exports.getPhotoPaths = async function(keywords) {
     // keywords = ["dog", "cat", "rabbit"];
 
     const options = {
-        hostname: 'vpc-smart-photo-album-dev-vw3z45d3omxyjtrjfwacvlke4i.us-east-1.es.amazonaws.com',
+        hostname: 'vpc-photo-search-album-zelam7lth2thitno4brjoztjxq.us-east-1.es.amazonaws.com',
         path: '/_search?q=labels:' + keywords.join(),
         method: 'GET',
         headers: {
