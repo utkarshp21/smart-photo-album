@@ -63,25 +63,38 @@ function searchImages() {
     else{
         apigClient.searchGet({ "q": searchQuery })
             .then(function (result) {
-                console.log(result.data.body.imagePaths);
+                // console.log(result.data.body.imagePaths);
                 showImages(result.data.body.imagePaths);
             }).catch(function (result) {
-                console.log(result);
                 alert("Error in Fetching Images");
         });
     }
 }
 
-function showImages(imagesPaths) {
+
+async function showImages(images) {
     $("#imageContainer").empty();
+   
+    let promises = images.map(async (image) => {
+        let response = await fetch(`https://s3.amazonaws.com/${image}`, {
+            method: 'GET'
+        });
+        return response;
+    });
+
+    let tempResponses = await Promise.all(promises);
+    
+    let imagesPaths = tempResponses.filter((r) => {
+        return r.status === 200;
+    }).map((item) => item.url);
 
     if(!imagesPaths.length){
-        alert("No Images Found!")
+        alert("No Images Found!");
     }else{
         imagesPaths.forEach(path => {
             $('#imageContainer').append(`<div class="col-md-4 nopadding"><div class="thumbnail">
-                <a href="https://s3.amazonaws.com/${path}" target="_blank">
-                <img src="https://s3.amazonaws.com/${path}" alt="Lights" style="width:100%"></a></div></div>`)
+                <a href="${path}" target="_blank">
+                <img src="${path}" alt="Lights" style="width:100%"></a></div></div>`)
         });
     }
 }
@@ -146,6 +159,4 @@ function upload(image, imglabel) {
             alert(`Error -${err}`);
     });	
 
-    
-    
 }
